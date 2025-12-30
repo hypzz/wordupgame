@@ -9,10 +9,10 @@
       "fact": "Assets are resources owned by a business that have economic value. Examples include cash, inventory, equipment, and accounts receivable."
     },
     {
-      "word": "LIABILITIES",
+      "word": "LIABILITY",
       "fragments": ["LIA", "BIL", "ITY"],
       "orientation": "vertical",
-      "fact": "Liabilities are obligations the business owes to others. Examples include loans, accounts payable, and accrued expenses."
+      "fact": "A liability is an obligation the business owes to others. Examples include loans, accounts payable, and accrued expenses."
     },
     {
       "word": "EQUITY",
