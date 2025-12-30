@@ -17,7 +17,7 @@
   "gameSettings": {
     "snapDistance": 200,
     "snapTolerance": 30,
-    "completionDelay": 100,
+    "completionDelay": 350,
     "cellSize": {
       "desktop": 50,
       "tablet": 40,

@@ -40,6 +40,7 @@ var CELL_SIZE = 50;
 var SNAP_DISTANCE = 150;
 var SNAP_TOLERANCE = 5;
 var COMPLETION_DELAY = 350;
+var GRID_SIZE = 10; // Snap to 10px grid for organized alignment
 
 var pieces = [];
 var completedWords = new Set();
@@ -54,6 +55,54 @@ var successSound = null;
 // ===================================
 // UTILITY FUNCTIONS
 // ===================================
+
+function snapToGrid(value) {
+    return Math.round(value / GRID_SIZE) * GRID_SIZE;
+}
+
+function getPieceData(pieceElement) {
+    var index = parseInt(pieceElement.dataset.pieceIndex, 10);
+    return pieces[index];
+}
+
+function setPiecePosition(pieceData, x, y) {
+    pieceData.x = x;
+    pieceData.y = y;
+    pieceData.element.style.left = x + 'px';
+    pieceData.element.style.top = y + 'px';
+}
+
+function getPieceRect(pieceData) {
+    var left = pieceData.x;
+    var top = pieceData.y;
+    var width = pieceData.width;
+    var height = pieceData.height;
+
+    if (left === undefined || left === null) {
+        left = pieceData.element.offsetLeft;
+    }
+
+    if (top === undefined || top === null) {
+        top = pieceData.element.offsetTop;
+    }
+
+    if (!width) {
+        width = pieceData.element.offsetWidth;
+    }
+
+    if (!height) {
+        height = pieceData.element.offsetHeight;
+    }
+
+    return {
+        left: left,
+        top: top,
+        right: left + width,
+        bottom: top + height,
+        width: width,
+        height: height
+    };
+}
 
 function getCellSizeForViewport() {
     var width = window.innerWidth;
@@ -264,6 +313,10 @@ function createPieces() {
                 randomX = Math.max(minX, Math.min(maxX, minX + Math.random() * (maxX - minX)));
                 randomY = Math.max(minY, Math.min(maxY, minY + Math.random() * (maxY - minY)));
 
+                // Snap to grid for perfect alignment
+                randomX = snapToGrid(randomX);
+                randomY = snapToGrid(randomY);
+
                 // Check if this position overlaps with any placed pieces
                 overlapping = placedPieces.some(function(placed) {
                     var horizontalOverlap = randomX < placed.right && (randomX + pieceWidth) > placed.left;
@@ -279,8 +332,21 @@ function createPieces() {
                 console.log('  ⚠️ Could not find non-overlapping spot for "' + fragment + '" after 50 attempts');
             }
 
-            piece.style.left = randomX + 'px';
-            piece.style.top = randomY + 'px';
+            var pieceData = {
+                element: piece,
+                fragment: fragment,
+                word: wordData.word,
+                wordIndex: wordIndex,
+                orientation: orientation,
+                completed: false,
+                width: pieceWidth,
+                height: pieceHeight,
+                x: randomX,
+                y: randomY
+            };
+
+            piece.dataset.pieceIndex = pieces.length;
+            setPiecePosition(pieceData, randomX, randomY);
 
             // Track this piece's position
             placedPieces.push({
@@ -292,14 +358,7 @@ function createPieces() {
 
             console.log('  ✓ Piece "' + fragment + '" (' + pieceWidth + 'x' + pieceHeight + 'px ' + orientation + ') at (' + randomX.toFixed(0) + ', ' + randomY.toFixed(0) + ')');
 
-            pieces.push({
-                element: piece,
-                fragment: fragment,
-                word: wordData.word,
-                wordIndex: wordIndex,
-                orientation: orientation,
-                completed: false
-            });
+            pieces.push(pieceData);
 
             gameArea.appendChild(piece);
         });
@@ -471,6 +530,7 @@ function handleDragEnd(e) {
     if (!draggedPiece) return;
 
     var gameAreaRect = gameArea.getBoundingClientRect();
+    var pieceData = getPieceData(draggedPiece);
 
     // Calculate new position relative to game area
     var newX = e.clientX - gameAreaRect.left - dragOffsetX;
@@ -480,18 +540,21 @@ function handleDragEnd(e) {
     newX = Math.max(0, Math.min(newX, gameAreaRect.width - draggedPiece.offsetWidth));
     newY = Math.max(0, Math.min(newY, gameAreaRect.height - draggedPiece.offsetHeight));
 
+    // Snap to grid for perfect alignment
+    newX = snapToGrid(newX);
+    newY = snapToGrid(newY);
+
     console.log('📍 Piece dropped at (' + newX.toFixed(0) + ', ' + newY.toFixed(0) + ')');
 
     // Remove dragging class first to enable smooth transition
     draggedPiece.classList.remove('dragging');
 
-    // Try to snap to nearby pieces
-    var snapped = trySnapToPieces(draggedPiece, newX, newY);
+    // Try to snap to nearby pieces (will also apply grid snapping)
+    var snapped = trySnapToPieces(pieceData, newX, newY);
 
     if (!snapped) {
-        // No snap, just position where dropped
-        draggedPiece.style.left = newX + 'px';
-        draggedPiece.style.top = newY + 'px';
+        // No snap, just position where dropped (already grid-snapped)
+        setPiecePosition(pieceData, newX, newY);
         console.log('  → No snap detected, placed freely');
     }
 
@@ -559,6 +622,14 @@ function handleTouchEnd(e) {
 
     var currentX = parseFloat(touchedPiece.style.left);
     var currentY = parseFloat(touchedPiece.style.top);
+    var pieceData = getPieceData(touchedPiece);
+
+    // Snap to grid for perfect alignment
+    currentX = snapToGrid(currentX);
+    currentY = snapToGrid(currentY);
+
+    // Update state position on grid before snapping check
+    setPiecePosition(pieceData, currentX, currentY);
 
     console.log('📍 Touch ended at (' + currentX.toFixed(0) + ', ' + currentY.toFixed(0) + ')');
 
@@ -566,8 +637,13 @@ function handleTouchEnd(e) {
     touchedPiece.style.transition = '';
     touchedPiece.style.zIndex = '';
 
-    // Try to snap to nearby pieces
-    var snapped = trySnapToPieces(touchedPiece, currentX, currentY);
+    // Try to snap to nearby pieces (will also apply grid snapping)
+    var snapped = trySnapToPieces(pieceData, currentX, currentY);
+
+    if (!snapped) {
+        // No snap, just position where dropped (already grid-snapped)
+        console.log('  → No snap detected, placed freely');
+    }
 
     // Check word completion
     setTimeout(function() {
@@ -581,23 +657,23 @@ function handleTouchEnd(e) {
 // SNAPPING LOGIC
 // ===================================
 
-function trySnapToPieces(piece, x, y) {
-    var pieceWord = piece.dataset.word;
-    var pieceOrientation = piece.dataset.orientation || 'horizontal';
+function trySnapToPieces(pieceData, x, y) {
+    var pieceWord = pieceData.word;
+    var pieceOrientation = pieceData.orientation || 'horizontal';
     var pieceRect = {
         left: x,
         top: y,
-        right: x + piece.offsetWidth,
-        bottom: y + piece.offsetHeight,
-        width: piece.offsetWidth,
-        height: piece.offsetHeight
+        right: x + pieceData.width,
+        bottom: y + pieceData.height,
+        width: pieceData.width,
+        height: pieceData.height
     };
 
-    console.log('🔍 Checking snap for "' + piece.dataset.fragment + '" (' + pieceOrientation + ')...');
+    console.log('🔍 Checking snap for "' + pieceData.fragment + '" (' + pieceOrientation + ')...');
 
     // Find all pieces from the same word
     var sameWordPieces = pieces.filter(function(p) {
-        return p.word === pieceWord && p.element !== piece;
+        return p.word === pieceWord && p !== pieceData;
     });
 
     var bestSnap = null;
@@ -606,18 +682,8 @@ function trySnapToPieces(piece, x, y) {
 
     for (var i = 0; i < sameWordPieces.length; i++) {
         var otherPiece = sameWordPieces[i];
-        var otherRect = otherPiece.element.getBoundingClientRect();
-        var gameAreaRect = gameArea.getBoundingClientRect();
         var otherOrientation = otherPiece.orientation || 'horizontal';
-
-        var otherPos = {
-            left: otherRect.left - gameAreaRect.left,
-            top: otherRect.top - gameAreaRect.top,
-            right: otherRect.right - gameAreaRect.left,
-            bottom: otherRect.bottom - gameAreaRect.top,
-            width: otherRect.width,
-            height: otherRect.height
-        };
+        var otherRect = getPieceRect(otherPiece);
 
         // Both pieces must have same orientation to snap
         if (pieceOrientation !== otherOrientation) continue;
@@ -626,15 +692,15 @@ function trySnapToPieces(piece, x, y) {
             // HORIZONTAL SNAPPING
 
             // Check snapping to right of other piece
-            var rightDistance = Math.abs(pieceRect.left - otherPos.right);
-            var verticalAlign = Math.abs(pieceRect.top - otherPos.top);
+            var rightDistance = Math.abs(pieceRect.left - otherRect.right);
+            var verticalAlign = Math.abs(pieceRect.top - otherRect.top);
 
             if (rightDistance < bestDistance && verticalAlign < SNAP_DISTANCE) {
                 var totalDist = rightDistance + verticalAlign;
                 if (!bestSnap || totalDist < bestSnap.distance) {
                     bestSnap = {
-                        x: otherPos.right,
-                        y: otherPos.top,
+                        x: otherRect.right,
+                        y: otherRect.top,
                         side: 'right',
                         other: otherPiece.fragment,
                         distance: totalDist
@@ -643,15 +709,15 @@ function trySnapToPieces(piece, x, y) {
             }
 
             // Check snapping to left of other piece
-            var leftDistance = Math.abs(pieceRect.right - otherPos.left);
-            var verticalAlignLeft = Math.abs(pieceRect.top - otherPos.top);
+            var leftDistance = Math.abs(pieceRect.right - otherRect.left);
+            var verticalAlignLeft = Math.abs(pieceRect.top - otherRect.top);
 
             if (leftDistance < bestDistance && verticalAlignLeft < SNAP_DISTANCE) {
                 var totalDist = leftDistance + verticalAlignLeft;
                 if (!bestSnap || totalDist < bestSnap.distance) {
                     bestSnap = {
-                        x: otherPos.left - pieceRect.width,
-                        y: otherPos.top,
+                        x: otherRect.left - pieceRect.width,
+                        y: otherRect.top,
                         side: 'left',
                         other: otherPiece.fragment,
                         distance: totalDist
@@ -662,15 +728,15 @@ function trySnapToPieces(piece, x, y) {
             // VERTICAL SNAPPING
 
             // Check snapping to bottom of other piece
-            var bottomDistance = Math.abs(pieceRect.top - otherPos.bottom);
-            var horizontalAlign = Math.abs(pieceRect.left - otherPos.left);
+            var bottomDistance = Math.abs(pieceRect.top - otherRect.bottom);
+            var horizontalAlign = Math.abs(pieceRect.left - otherRect.left);
 
             if (bottomDistance < bestDistance && horizontalAlign < SNAP_DISTANCE) {
                 var totalDist = bottomDistance + horizontalAlign;
                 if (!bestSnap || totalDist < bestSnap.distance) {
                     bestSnap = {
-                        x: otherPos.left,
-                        y: otherPos.bottom,
+                        x: otherRect.left,
+                        y: otherRect.bottom,
                         side: 'bottom',
                         other: otherPiece.fragment,
                         distance: totalDist
@@ -679,15 +745,15 @@ function trySnapToPieces(piece, x, y) {
             }
 
             // Check snapping to top of other piece
-            var topDistance = Math.abs(pieceRect.bottom - otherPos.top);
-            var horizontalAlignTop = Math.abs(pieceRect.left - otherPos.left);
+            var topDistance = Math.abs(pieceRect.bottom - otherRect.top);
+            var horizontalAlignTop = Math.abs(pieceRect.left - otherRect.left);
 
             if (topDistance < bestDistance && horizontalAlignTop < SNAP_DISTANCE) {
                 var totalDist = topDistance + horizontalAlignTop;
                 if (!bestSnap || totalDist < bestSnap.distance) {
                     bestSnap = {
-                        x: otherPos.left,
-                        y: otherPos.top - pieceRect.height,
+                        x: otherRect.left,
+                        y: otherRect.top - pieceRect.height,
                         side: 'top',
                         other: otherPiece.fragment,
                         distance: totalDist
@@ -698,17 +764,20 @@ function trySnapToPieces(piece, x, y) {
     }
 
     if (bestSnap) {
-        piece.style.left = bestSnap.x + 'px';
-        piece.style.top = bestSnap.y + 'px';
+        // Apply grid snapping for pixel-perfect alignment
+        var snappedX = snapToGrid(bestSnap.x);
+        var snappedY = snapToGrid(bestSnap.y);
+
+        setPiecePosition(pieceData, snappedX, snappedY);
 
         // Add snap animation class temporarily
-        piece.classList.add('snapping');
+        pieceData.element.classList.add('snapping');
         setTimeout(function() {
-            piece.classList.remove('snapping');
+            pieceData.element.classList.remove('snapping');
         }, 300);
 
         // Create ripple effect at snap point
-        createRippleEffect(bestSnap.x + pieceRect.width / 2, bestSnap.y + pieceRect.height / 2);
+        createRippleEffect(snappedX + pieceRect.width / 2, snappedY + pieceRect.height / 2);
 
         console.log('  ✓ Snapped to ' + bestSnap.side.toUpperCase() + ' of "' + bestSnap.other + '" (distance: ' + bestSnap.distance.toFixed(0) + 'px)');
         return true;
@@ -751,14 +820,12 @@ function arePiecesConnected(wordPieces, wordData) {
 
     // Sort pieces based on orientation
     var sortedPieces = wordPieces.slice().sort(function(a, b) {
+        var aRect = getPieceRect(a);
+        var bRect = getPieceRect(b);
         if (orientation === 'horizontal') {
-            var aLeft = parseFloat(a.element.style.left);
-            var bLeft = parseFloat(b.element.style.left);
-            return aLeft - bLeft;
+            return aRect.left - bRect.left;
         } else {
-            var aTop = parseFloat(a.element.style.top);
-            var bTop = parseFloat(b.element.style.top);
-            return aTop - bTop;
+            return aRect.top - bRect.top;
         }
     });
 
@@ -771,11 +838,11 @@ function arePiecesConnected(wordPieces, wordData) {
 
     // Check if pieces are actually connected (touching) with reasonable tolerance
     for (var i = 0; i < sortedPieces.length - 1; i++) {
-        var current = sortedPieces[i].element;
-        var next = sortedPieces[i + 1].element;
+        var current = sortedPieces[i];
+        var next = sortedPieces[i + 1];
 
-        var currentRect = current.getBoundingClientRect();
-        var nextRect = next.getBoundingClientRect();
+        var currentRect = getPieceRect(current);
+        var nextRect = getPieceRect(next);
 
         if (orientation === 'horizontal') {
             // For horizontal: pieces must be touching AND aligned vertically
@@ -810,12 +877,11 @@ function markWordAsComplete(wordIndex, wordPieces) {
     var minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
 
     wordPieces.forEach(function(piece) {
-        var rect = piece.element.getBoundingClientRect();
-        var gameAreaRect = gameArea.getBoundingClientRect();
-        var left = rect.left - gameAreaRect.left;
-        var top = rect.top - gameAreaRect.top;
-        var right = left + rect.width;
-        var bottom = top + rect.height;
+        var rect = getPieceRect(piece);
+        var left = rect.left;
+        var top = rect.top;
+        var right = rect.right;
+        var bottom = rect.bottom;
 
         minX = Math.min(minX, left);
         minY = Math.min(minY, top);
@@ -838,10 +904,9 @@ function markWordAsComplete(wordIndex, wordPieces) {
 
     // Now apply gradient positioning
     wordPieces.forEach(function(piece) {
-        var rect = piece.element.getBoundingClientRect();
-        var gameAreaRect = gameArea.getBoundingClientRect();
-        var left = rect.left - gameAreaRect.left;
-        var top = rect.top - gameAreaRect.top;
+        var rect = getPieceRect(piece);
+        var left = rect.left;
+        var top = rect.top;
 
         // Calculate offset within the word
         var offsetX = left - minX;
@@ -854,8 +919,11 @@ function markWordAsComplete(wordIndex, wordPieces) {
 
     console.log('🔒 Word locked: ' + puzzleConfig.words[wordIndex].word);
 
-    // Create celebration effect
-    createWordCompletionEffect(wordPieces);
+    // Use requestAnimationFrame to ensure celebration effects render in next frame
+    // This prevents the delay where effects don't appear until another piece is moved
+    requestAnimationFrame(function() {
+        createWordCompletionEffect(wordPieces);
+    });
 
     // Track word completion in Google Analytics
     if (typeof gtag !== 'undefined') {
@@ -907,10 +975,9 @@ function createWordCompletionEffect(wordPieces) {
     var totalY = 0;
 
     wordPieces.forEach(function(piece) {
-        var rect = piece.element.getBoundingClientRect();
-        var gameAreaRect = gameArea.getBoundingClientRect();
-        totalX += (rect.left - gameAreaRect.left) + rect.width / 2;
-        totalY += (rect.top - gameAreaRect.top) + rect.height / 2;
+        var rect = getPieceRect(piece);
+        totalX += rect.left + rect.width / 2;
+        totalY += rect.top + rect.height / 2;
     });
 
     var centerX = totalX / wordPieces.length;
