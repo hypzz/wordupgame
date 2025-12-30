@@ -16,6 +16,8 @@
     --completed-bg: #dbeafe;
     --completed-border: #2563eb;
     --text-dark: #1e40af;
+    --cell-divider: rgba(0, 0, 0, 0.06);
+    --cell-divider-completed: rgba(0, 0, 0, 0.1);
 }
 
 /* Reset & Base Styles */
@@ -217,11 +219,18 @@ main {
 
 /* Individual letter cells within pieces */
 .piece > div {
-    border-right: 2px solid var(--primary-color);
+    border-right: 1px solid var(--cell-divider);
+    border-bottom: 1px solid var(--cell-divider);
 }
 
 .piece > div:last-child {
     border-right: none;
+    border-bottom: none;
+}
+
+/* Remove bottom border for horizontal pieces */
+.piece:not([style*="flex-direction: column"]) > div {
+    border-bottom: none;
 }
 
 .piece:hover {
@@ -264,7 +273,8 @@ main {
 }
 
 .piece.completed > div {
-    border-right-color: var(--completed-border);
+    border-right-color: var(--cell-divider-completed);
+    border-bottom-color: var(--cell-divider-completed);
 }
 
 .piece.locked {

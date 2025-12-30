@@ -190,13 +190,23 @@ async function loadConfig() {
 
 function applyTheme() {
     var colors = puzzleConfig.theme.colors;
+
+    // Extract RGB values from completed border color for semi-transparent divider
+    // This ensures the cell divider matches the theme
+    var completedBorderRgb = colors.completedBorder || colors.primary;
+
     var style = document.createElement('style');
     style.textContent =
         ':root {' +
         '  --primary-color: ' + colors.primary + ';' +
+        '  --primary-dark: ' + (colors.primaryDark || colors.primary) + ';' +
+        '  --primary-hover: ' + (colors.primaryHover || colors.primary) + ';' +
         '  --gradient-start: ' + colors.gradientStart + ';' +
         '  --gradient-end: ' + colors.gradientEnd + ';' +
         '  --piece-bg: ' + colors.pieceBackground + ';' +
+        '  --completed-bg: ' + (colors.completedBg || '#e0e7ff') + ';' +
+        '  --completed-border: ' + (colors.completedBorder || colors.primary) + ';' +
+        '  --text-dark: ' + (colors.textDark || '#1e40af') + ';' +
         '}';
     document.head.appendChild(style);
 
@@ -325,11 +335,6 @@ function createPieceElement(fragment, word, wordIndex, fragmentIndex, orientatio
             letterDiv.style.display = 'flex';
             letterDiv.style.alignItems = 'center';
             letterDiv.style.justifyContent = 'center';
-
-            // Add border between letters (except last)
-            if (i < fragment.length - 1) {
-                letterDiv.style.borderBottom = '2px solid var(--primary-color)';
-            }
 
             piece.appendChild(letterDiv);
         }
@@ -798,10 +803,53 @@ function arePiecesConnected(wordPieces, wordData) {
 }
 
 function markWordAsComplete(wordIndex, wordPieces) {
-    // Mark all pieces as completed and locked
+    var wordData = puzzleConfig.words[wordIndex];
+    var orientation = wordData.orientation || 'horizontal';
+
+    // Calculate the bounding box of the entire completed word
+    var minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+
     wordPieces.forEach(function(piece) {
+        var rect = piece.element.getBoundingClientRect();
+        var gameAreaRect = gameArea.getBoundingClientRect();
+        var left = rect.left - gameAreaRect.left;
+        var top = rect.top - gameAreaRect.top;
+        var right = left + rect.width;
+        var bottom = top + rect.height;
+
+        minX = Math.min(minX, left);
+        minY = Math.min(minY, top);
+        maxX = Math.max(maxX, right);
+        maxY = Math.max(maxY, bottom);
+    });
+
+    var totalWidth = maxX - minX;
+    var totalHeight = maxY - minY;
+
+    // Apply unified gradient across all pieces
+    wordPieces.forEach(function(piece) {
+        // Add completed class first
         piece.element.classList.add('completed', 'locked');
         piece.completed = true;
+    });
+
+    // Force a reflow to ensure completed styles are applied
+    void wordPieces[0].element.offsetHeight;
+
+    // Now apply gradient positioning
+    wordPieces.forEach(function(piece) {
+        var rect = piece.element.getBoundingClientRect();
+        var gameAreaRect = gameArea.getBoundingClientRect();
+        var left = rect.left - gameAreaRect.left;
+        var top = rect.top - gameAreaRect.top;
+
+        // Calculate offset within the word
+        var offsetX = left - minX;
+        var offsetY = top - minY;
+
+        // Apply gradient with proper sizing and positioning
+        piece.element.style.backgroundSize = totalWidth + 'px ' + totalHeight + 'px';
+        piece.element.style.backgroundPosition = '-' + offsetX + 'px -' + offsetY + 'px';
     });
 
     console.log('🔒 Word locked: ' + puzzleConfig.words[wordIndex].word);
