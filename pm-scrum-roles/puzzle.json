@@ -1,0 +1,30 @@
+{
+  "title": "Product Management",
+  "description": "📊 What are the key Scrum Roles? 🎯",
+  "words": [
+    {
+      "word": "SCRUMMASTER",
+      "fragments": ["SCRU", "MMAS", "TER"],
+      "orientation": "vertical",
+      "fact": "The Scrum Master facilitates the Scrum process, removes impediments, and ensures the team follows Agile practices. They serve the team, not manage it."
+    },
+    {
+      "word": "PRODUCTOWNER",
+      "fragments": ["PROD", "UCTO", "WNER"],
+      "orientation": "vertical",
+      "fact": "The Product Owner maximizes product value by managing the backlog, prioritizing features, and representing stakeholder needs to the development team."
+    },
+    {
+      "word": "DEVELOPER",
+      "fragments": ["DEVE", "LOP", "ER"],
+      "orientation": "vertical",
+      "fact": "Developers are cross-functional team members who build the product increment. In Scrum, everyone who creates the product is called a Developer."
+    },
+    {
+      "word": "STAKEHOLDER",
+      "fragments": ["STAKE", "HOLD", "ER"],
+      "orientation": "vertical",
+      "fact": "Stakeholders are people outside the Scrum Team who have an interest in the product, such as customers, users, executives, and sponsors."
+    }
+  ]
+}
