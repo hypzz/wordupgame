@@ -21,315 +21,92 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             min-height: 100vh;
             color: white;
         }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 30px 20px 40px;
-        }
-
-        /* Header - More Compact */
-        header {
-            text-align: center;
-            margin-bottom: 35px;
-            padding: 20px 20px 10px;
-        }
-
-        .logo {
-            font-size: 3.5em;
-            margin-bottom: 8px;
-            line-height: 1;
-        }
-
+        .container { max-width: 1200px; margin: 0 auto; padding: 30px 20px 40px; }
+        header { text-align: center; margin-bottom: 35px; padding: 20px 20px 10px; }
+        .logo { font-size: 3.5em; margin-bottom: 8px; line-height: 1; }
         h1 {
-            font-size: 3em;
-            margin-bottom: 8px;
+            font-size: 3em; margin-bottom: 8px;
             background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-weight: 800;
-            letter-spacing: -0.02em;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text; font-weight: 800; letter-spacing: -0.02em;
         }
-
-        .tagline {
-            font-size: 1.1em;
-            color: #94a3b8;
-            font-weight: 400;
-            margin-bottom: 12px;
-        }
-
+        .tagline { font-size: 1.1em; color: #94a3b8; font-weight: 400; margin-bottom: 12px; }
         .daily-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
-            color: white;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 0.85em;
+            display: inline-block; background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+            color: white; padding: 6px 16px; border-radius: 20px; font-weight: 600; font-size: 0.85em;
             animation: pulse 2s ease-in-out infinite;
         }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        /* Today's Puzzles Section */
-        .section-title {
-            font-size: 1.6em;
-            margin-bottom: 25px;
-            text-align: center;
-            color: #f1f5f9;
-            font-weight: 700;
-            letter-spacing: -0.01em;
-        }
-
-        .puzzles-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-            gap: 30px;
-            margin-bottom: 50px;
-        }
-
-        /* Puzzle Card - More Compact & Polished */
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        .section-title { font-size: 1.6em; margin-bottom: 25px; text-align: center; color: #f1f5f9; font-weight: 700; letter-spacing: -0.01em; }
+        .puzzles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 30px; margin-bottom: 50px; }
         .puzzle-card {
-            background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 
-                0 20px 60px rgba(0, 0, 0, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-            overflow: hidden;
+            background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%); border-radius: 20px; padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative; overflow: hidden;
         }
-
         .puzzle-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
             background: linear-gradient(90deg, var(--card-gradient-start), var(--card-gradient-end));
         }
-
         .puzzle-card:hover {
             transform: translateY(-6px);
-            box-shadow: 
-                0 30px 80px rgba(0, 0, 0, 0.5),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
             border-color: rgba(255, 255, 255, 0.2);
         }
-
-        /* PM Theme */
-        .puzzle-card.pm-theme {
-            --card-gradient-start: #3b82f6;
-            --card-gradient-end: #8b5cf6;
-        }
-
-        /* Accounting Theme */
-        .puzzle-card.accounting-theme {
-            --card-gradient-start: #10b981;
-            --card-gradient-end: #06b6d4;
-        }
-
+        .puzzle-card.pm-theme { --card-gradient-start: #3b82f6; --card-gradient-end: #8b5cf6; }
+        .puzzle-card.accounting-theme { --card-gradient-start: #10b981; --card-gradient-end: #06b6d4; }
         .category-badge {
-            display: inline-block;
-            padding: 5px 14px;
-            border-radius: 10px;
-            font-size: 0.75em;
-            font-weight: 700;
-            margin-bottom: 16px;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
+            display: inline-block; padding: 5px 14px; border-radius: 10px; font-size: 0.75em;
+            font-weight: 700; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.8px;
         }
-
-        .pm-badge {
-            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
-        }
-
-        .accounting-badge {
-            background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
-        }
-
-        /* Smaller, cleaner emoji icons */
-        .puzzle-icon {
-            font-size: 2.5em;
-            margin-bottom: 16px;
-            display: block;
-            line-height: 1;
-            letter-spacing: 0.05em;
-        }
-
-        .puzzle-title {
-            font-size: 1.6em;
-            font-weight: 700;
-            margin-bottom: 12px;
-            color: #f1f5f9;
-            line-height: 1.25;
-            letter-spacing: -0.01em;
-        }
-
-        .puzzle-description {
-            font-size: 1em;
-            color: #cbd5e1;
-            line-height: 1.5;
-            margin-bottom: 20px;
-            font-weight: 400;
-        }
-
-        .puzzle-meta {
-            display: flex;
-            gap: 16px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .meta-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.85em;
-            color: #94a3b8;
-            font-weight: 500;
-        }
-
-        .meta-icon {
-            font-size: 1.1em;
-        }
-
+        .pm-badge { background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); }
+        .accounting-badge { background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%); }
+        .puzzle-icon { font-size: 1.8em; margin-bottom: 14px; display: block; line-height: 1; letter-spacing: 0.05em; }
+        .puzzle-title { font-size: 1.6em; font-weight: 700; margin-bottom: 12px; color: #f1f5f9; line-height: 1.25; letter-spacing: -0.01em; }
+        .puzzle-description { font-size: 1em; color: #cbd5e1; line-height: 1.5; margin-bottom: 20px; font-weight: 400; }
+        .puzzle-meta { display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
+        .meta-item { display: flex; align-items: center; gap: 6px; font-size: 0.85em; color: #94a3b8; font-weight: 500; }
+        .meta-icon { font-size: 1.1em; }
         .btn {
-            width: 100%;
-            padding: 14px 28px;
-            border-radius: 12px;
-            font-size: 1.05em;
-            font-weight: 600;
-            text-decoration: none;
-            text-align: center;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            display: block;
-            letter-spacing: -0.01em;
+            width: 100%; padding: 14px 28px; border-radius: 12px; font-size: 1.05em; font-weight: 600;
+            text-decoration: none; text-align: center; transition: all 0.3s ease;
+            border: none; cursor: pointer; display: block; letter-spacing: -0.01em;
         }
-
         .btn-primary {
             background: linear-gradient(135deg, var(--card-gradient-start), var(--card-gradient-end));
-            color: white;
-            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+            color: white; box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
         }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 30px rgba(59, 130, 246, 0.4);
-        }
-
-        /* Footer - More Compact */
-        footer {
-            text-align: center;
-            padding: 30px 20px;
-            color: #64748b;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            margin-top: 40px;
-        }
-
-        footer p {
-            margin: 6px 0;
-            font-size: 0.9em;
-            font-weight: 400;
-        }
-
-        /* Mobile Responsive */
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(59, 130, 246, 0.4); }
+        footer { text-align: center; padding: 30px 20px; color: #64748b; border-top: 1px solid rgba(255, 255, 255, 0.1); margin-top: 40px; }
+        footer p { margin: 6px 0; font-size: 0.9em; font-weight: 400; }
         @media (max-width: 768px) {
-            .container {
-                padding: 20px 15px 30px;
-            }
-
-            header {
-                padding: 15px 15px 5px;
-                margin-bottom: 25px;
-            }
-
-            .logo {
-                font-size: 2.8em;
-            }
-
-            h1 {
-                font-size: 2.2em;
-            }
-
-            .tagline {
-                font-size: 1em;
-            }
-
-            .section-title {
-                font-size: 1.4em;
-                margin-bottom: 20px;
-            }
-
-            .puzzles-grid {
-                grid-template-columns: 1fr;
-                gap: 25px;
-                margin-bottom: 40px;
-            }
-
-            .puzzle-card {
-                padding: 25px;
-            }
-
-            .puzzle-icon {
-                font-size: 2.2em;
-            }
-
-            .puzzle-title {
-                font-size: 1.4em;
-            }
-
-            .puzzle-description {
-                font-size: 0.95em;
-            }
-
-            .btn {
-                padding: 13px 24px;
-                font-size: 1em;
-            }
+            .container { padding: 20px 15px 30px; }
+            header { padding: 15px 15px 5px; margin-bottom: 25px; }
+            .logo { font-size: 2.8em; }
+            h1 { font-size: 2.2em; }
+            .tagline { font-size: 1em; }
+            .section-title { font-size: 1.4em; margin-bottom: 20px; }
+            .puzzles-grid { grid-template-columns: 1fr; gap: 25px; margin-bottom: 40px; }
+            .puzzle-card { padding: 25px; }
+            .puzzle-icon { font-size: 1.6em; }
+            .puzzle-title { font-size: 1.4em; }
+            .puzzle-description { font-size: 0.95em; }
+            .btn { padding: 13px 24px; font-size: 1em; }
         }
-
         @media (max-width: 480px) {
-            .logo {
-                font-size: 2.5em;
-            }
-
-            h1 {
-                font-size: 1.9em;
-            }
-
-            .puzzle-card {
-                padding: 22px;
-            }
-
-            .puzzle-icon {
-                font-size: 2em;
-            }
-
-            .puzzle-title {
-                font-size: 1.3em;
-            }
+            .logo { font-size: 2.5em; }
+            h1 { font-size: 1.9em; }
+            .puzzle-card { padding: 22px; }
+            .puzzle-icon { font-size: 1.5em; }
+            .puzzle-title { font-size: 1.3em; }
         }
     </style>
 </head>
@@ -341,63 +118,39 @@
             <p class="tagline">Daily Educational Puzzles - Learn Through Play</p>
             <span class="daily-badge">🔥 New Puzzles Daily</span>
         </header>
-
         <main>
             <h2 class="section-title">Today's Puzzles</h2>
-            
             <div class="puzzles-grid">
-                <!-- Product Management Puzzle -->
                 <div class="puzzle-card pm-theme">
-                    <span class="category-badge pm-badge">📊 Product Management</span>
-                    <span class="puzzle-icon">🔄 ⏰</span>
+                    <span class="category-badge pm-badge">🎯 Product Management</span>
+                    <span class="puzzle-icon">🔔 👥</span>
                     <h3 class="puzzle-title">What are the key Agile Ceremonies?</h3>
                     <p class="puzzle-description">
                         Discover the essential Scrum rituals that keep teams aligned and productive. Think sprint rhythms, daily check-ins, and team reflections.
                     </p>
                     <div class="puzzle-meta">
-                        <div class="meta-item">
-                            <span class="meta-icon">🎯</span>
-                            <span>4 Words</span>
-                        </div>
-                        <div class="meta-item">
-                            <span class="meta-icon">📱</span>
-                            <span>Vertical</span>
-                        </div>
-                        <div class="meta-item">
-                            <span class="meta-icon">⏱️</span>
-                            <span>5-10 min</span>
-                        </div>
+                        <div class="meta-item"><span class="meta-icon">🎯</span><span>4 Words</span></div>
+                        <div class="meta-item"><span class="meta-icon">📱</span><span>Vertical</span></div>
+                        <div class="meta-item"><span class="meta-icon">⏱️</span><span>5-10 min</span></div>
                     </div>
                     <a href="pm-agile-ceremonies/" class="btn btn-primary">Play Now</a>
                 </div>
-
-                <!-- Financial Accounting Puzzle -->
                 <div class="puzzle-card accounting-theme">
-                    <span class="category-badge accounting-badge">💰 Financial Accounting</span>
+                    <span class="category-badge accounting-badge">💰 Finance & Accounting</span>
                     <span class="puzzle-icon">💵 📊</span>
                     <h3 class="puzzle-title">What are the key Cost Types?</h3>
                     <p class="puzzle-description">
                         Uncover the fundamental ways businesses categorize their expenses. Some stay constant, others fluctuate, and some can be traced directly to products.
                     </p>
                     <div class="puzzle-meta">
-                        <div class="meta-item">
-                            <span class="meta-icon">🎯</span>
-                            <span>4 Words</span>
-                        </div>
-                        <div class="meta-item">
-                            <span class="meta-icon">📱</span>
-                            <span>Vertical</span>
-                        </div>
-                        <div class="meta-item">
-                            <span class="meta-icon">⏱️</span>
-                            <span>5-8 min</span>
-                        </div>
+                        <div class="meta-item"><span class="meta-icon">🎯</span><span>4 Words</span></div>
+                        <div class="meta-item"><span class="meta-icon">📱</span><span>Vertical</span></div>
+                        <div class="meta-item"><span class="meta-icon">⏱️</span><span>5-8 min</span></div>
                     </div>
                     <a href="accounting-cost-types/" class="btn btn-primary">Play Now</a>
                 </div>
             </div>
         </main>
-
         <footer>
             <p>🧩 <strong>WordUp</strong> - Making Learning Fun Through Puzzles</p>
             <p>New puzzles added daily • Play anywhere, anytime</p>
