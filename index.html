@@ -28,7 +28,7 @@
             min-height: 100vh;
             color: white;
         }
-        .container { max-width: 1200px; margin: 0 auto; padding: 30px 20px 40px; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 30px 20px 40px; }
         header { text-align: center; margin-bottom: 35px; padding: 20px 20px 10px; }
         .logo { font-size: 3.5em; margin-bottom: 8px; line-height: 1; }
         h1 {
@@ -45,7 +45,7 @@
         }
         @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
         .section-title { font-size: 1.6em; margin-bottom: 25px; text-align: center; color: #f1f5f9; font-weight: 700; letter-spacing: -0.01em; }
-        .puzzles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(450px, 1fr)); gap: 30px; margin-bottom: 50px; }
+        .puzzles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 30px; margin-bottom: 50px; }
         .puzzle-card {
             background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%); border-radius: 20px; padding: 30px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -63,15 +63,17 @@
         }
         .puzzle-card.pm-theme { --card-gradient-start: #3b82f6; --card-gradient-end: #8b5cf6; }
         .puzzle-card.accounting-theme { --card-gradient-start: #10b981; --card-gradient-end: #06b6d4; }
+        .puzzle-card.cybersec-theme { --card-gradient-start: #dc2626; --card-gradient-end: #f97316; }
         .category-badge {
             display: inline-block; padding: 5px 14px; border-radius: 10px; font-size: 0.75em;
             font-weight: 700; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.8px;
         }
         .pm-badge { background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); }
         .accounting-badge { background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%); }
+        .cybersec-badge { background: linear-gradient(135deg, #dc2626 0%, #f97316 100%); }
         .puzzle-icon { font-size: 1.8em; margin-bottom: 14px; display: block; line-height: 1; letter-spacing: 0.05em; }
-        .puzzle-title { font-size: 1.6em; font-weight: 700; margin-bottom: 12px; color: #f1f5f9; line-height: 1.25; letter-spacing: -0.01em; }
-        .puzzle-description { font-size: 1em; color: #cbd5e1; line-height: 1.5; margin-bottom: 20px; font-weight: 400; }
+        .puzzle-title { font-size: 1.5em; font-weight: 700; margin-bottom: 12px; color: #f1f5f9; line-height: 1.25; letter-spacing: -0.01em; }
+        .puzzle-description { font-size: 0.95em; color: #cbd5e1; line-height: 1.5; margin-bottom: 20px; font-weight: 400; }
         .puzzle-meta { display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap; }
         .meta-item { display: flex; align-items: center; gap: 6px; font-size: 0.85em; color: #94a3b8; font-weight: 500; }
         .meta-icon { font-size: 1.1em; }
@@ -97,8 +99,8 @@
             .puzzles-grid { grid-template-columns: 1fr; gap: 25px; margin-bottom: 40px; }
             .puzzle-card { padding: 25px; }
             .puzzle-icon { font-size: 1.6em; }
-            .puzzle-title { font-size: 1.4em; }
-            .puzzle-description { font-size: 0.95em; }
+            .puzzle-title { font-size: 1.3em; }
+            .puzzle-description { font-size: 0.9em; }
             .btn { padding: 13px 24px; font-size: 1em; }
         }
         @media (max-width: 480px) {
@@ -106,7 +108,7 @@
             h1 { font-size: 1.9em; }
             .puzzle-card { padding: 22px; }
             .puzzle-icon { font-size: 1.5em; }
-            .puzzle-title { font-size: 1.3em; }
+            .puzzle-title { font-size: 1.2em; }
         }
     </style>
 </head>
@@ -124,9 +126,9 @@
                 <div class="puzzle-card pm-theme">
                     <span class="category-badge pm-badge">🎯 Product Management</span>
                     <span class="puzzle-icon">📈 🔄</span>
-                    <h3 class="puzzle-title">What are the Product Lifecycle Stages?</h3>
+                    <h3 class="puzzle-title">Product Lifecycle Stages</h3>
                     <p class="puzzle-description">
-                        Discover the journey every product takes from launch to sunset. Think market entry, rapid expansion, peak saturation, and eventual phase-out.
+                        Discover the journey every product takes from launch to sunset. Think market entry, rapid expansion, peak saturation.
                     </p>
                     <div class="puzzle-meta">
                         <div class="meta-item"><span class="meta-icon">🎯</span><span>4 Words</span></div>
@@ -138,9 +140,9 @@
                 <div class="puzzle-card accounting-theme">
                     <span class="category-badge accounting-badge">💰 Finance & Accounting</span>
                     <span class="puzzle-icon">🏦 📊</span>
-                    <h3 class="puzzle-title">What are the key Asset Types?</h3>
+                    <h3 class="puzzle-title">Key Asset Types</h3>
                     <p class="puzzle-description">
-                        Uncover how businesses classify their valuable resources. Some convert quickly to cash, others are long-term holdings, and some you can't even touch.
+                        Uncover how businesses classify their valuable resources. Some convert quickly to cash, others are long-term, some intangible.
                     </p>
                     <div class="puzzle-meta">
                         <div class="meta-item"><span class="meta-icon">🎯</span><span>4 Words</span></div>
@@ -148,6 +150,20 @@
                         <div class="meta-item"><span class="meta-icon">⏱️</span><span>5-9 min</span></div>
                     </div>
                     <a href="accounting-asset-types/" class="btn btn-primary">Play Now</a>
+                </div>
+                <div class="puzzle-card cybersec-theme">
+                    <span class="category-badge cybersec-badge">🔒 Cybersecurity</span>
+                    <span class="puzzle-icon">🔐 🛡️</span>
+                    <h3 class="puzzle-title">Authentication Methods</h3>
+                    <p class="puzzle-description">
+                        Discover how systems verify your identity. From traditional secrets to biometric scans and digital certificates.
+                    </p>
+                    <div class="puzzle-meta">
+                        <div class="meta-item"><span class="meta-icon">🎯</span><span>4 Words</span></div>
+                        <div class="meta-item"><span class="meta-icon">📱</span><span>Vertical</span></div>
+                        <div class="meta-item"><span class="meta-icon">⏱️</span><span>5-8 min</span></div>
+                    </div>
+                    <a href="cybersec-authentication/" class="btn btn-primary">Play Now</a>
                 </div>
             </div>
         </main>
