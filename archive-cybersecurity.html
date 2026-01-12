@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cybersecurity Puzzles - WordUp</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #450a0a 0%, #7f1d1d 100%);
+            min-height: 100vh;
+            color: white;
+            padding: 40px 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #ef4444 0%, #f97316 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+        }
+        .header p {
+            font-size: 1.2em;
+            color: #fca5a5;
+            margin-bottom: 20px;
+        }
+        .back-link {
+            display: inline-block;
+            color: #fca5a5;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        .back-link:hover { color: #fecaca; }
+        .puzzles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        .puzzle-card {
+            background: linear-gradient(145deg, #7f1d1d 0%, #450a0a 100%);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .puzzle-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #dc2626, #f97316);
+            border-radius: 16px 16px 0 0;
+        }
+        .puzzle-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(239, 68, 68, 0.6);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+        .puzzle-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #dc2626, #f97316);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+        .puzzle-card h3 {
+            font-size: 1.4em;
+            margin-bottom: 12px;
+            color: #fef2f2;
+        }
+        .puzzle-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            font-size: 0.9em;
+            color: #fca5a5;
+        }
+        .puzzle-link {
+            display: block;
+            background: linear-gradient(135deg, #dc2626, #f97316);
+            color: white;
+            text-align: center;
+            padding: 12px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .puzzle-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+        }
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2.2em; }
+            .puzzles-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔒 Cybersecurity Puzzles</h1>
+            <p>Master security concepts through interactive word puzzles</p>
+            <a href="index.html" class="back-link">← Back to Home</a>
+        </div>
+
+        <div class="puzzles-grid">
+            <div class="puzzle-card">
+                <span class="puzzle-badge">Latest</span>
+                <h3>🔐 Authentication Methods</h3>
+                <div class="puzzle-meta">
+                    <span>🎯 4 Words</span>
+                    <span>📱 Vertical</span>
+                    <span>⏱️ 5-8 min</span>
+                </div>
+                <a href="cybersec-authentication/" class="puzzle-link">Play Now</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
