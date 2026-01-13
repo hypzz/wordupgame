@@ -64,13 +64,23 @@
         .puzzle-card.pm-theme { --card-gradient-start: #3b82f6; --card-gradient-end: #8b5cf6; }
         .puzzle-card.accounting-theme { --card-gradient-start: #10b981; --card-gradient-end: #06b6d4; }
         .puzzle-card.cybersec-theme { --card-gradient-start: #dc2626; --card-gradient-end: #f97316; }
+        
+        /* Clickable Category Badge */
         .category-badge {
             display: inline-block; padding: 5px 14px; border-radius: 10px; font-size: 0.75em;
             font-weight: 700; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.8px;
+            text-decoration: none; transition: all 0.3s ease;
+            cursor: pointer;
         }
-        .pm-badge { background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); }
-        .accounting-badge { background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%); }
-        .cybersec-badge { background: linear-gradient(135deg, #dc2626 0%, #f97316 100%); }
+        .category-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            filter: brightness(1.1);
+        }
+        .pm-badge { background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); color: white; }
+        .accounting-badge { background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%); color: white; }
+        .cybersec-badge { background: linear-gradient(135deg, #dc2626 0%, #f97316 100%); color: white; }
+        
         .puzzle-icon { font-size: 1.8em; margin-bottom: 14px; display: block; line-height: 1; letter-spacing: 0.05em; }
         .puzzle-title { font-size: 1.5em; font-weight: 700; margin-bottom: 12px; color: #f1f5f9; line-height: 1.25; letter-spacing: -0.01em; }
         .puzzle-description { font-size: 0.95em; color: #cbd5e1; line-height: 1.5; margin-bottom: 20px; font-weight: 400; }
@@ -124,7 +134,7 @@
             <h2 class="section-title">Today's Puzzles</h2>
             <div class="puzzles-grid">
                 <div class="puzzle-card pm-theme">
-                    <span class="category-badge pm-badge">🎯 Product Management</span>
+                    <a href="archive-pm.html" class="category-badge pm-badge">🎯 Product Management</a>
                     <span class="puzzle-icon">📈 🔄</span>
                     <h3 class="puzzle-title">Product Lifecycle Stages</h3>
                     <p class="puzzle-description">
@@ -138,7 +148,7 @@
                     <a href="pm-product-lifecycle/" class="btn btn-primary">Play Now</a>
                 </div>
                 <div class="puzzle-card accounting-theme">
-                    <span class="category-badge accounting-badge">💰 Finance & Accounting</span>
+                    <a href="archive-accounting.html" class="category-badge accounting-badge">💰 Finance & Accounting</a>
                     <span class="puzzle-icon">🏦 📊</span>
                     <h3 class="puzzle-title">Key Asset Types</h3>
                     <p class="puzzle-description">
@@ -152,7 +162,7 @@
                     <a href="accounting-asset-types/" class="btn btn-primary">Play Now</a>
                 </div>
                 <div class="puzzle-card cybersec-theme">
-                    <span class="category-badge cybersec-badge">🔒 Cybersecurity</span>
+                    <a href="archive-cybersecurity.html" class="category-badge cybersec-badge">🔒 Cybersecurity</a>
                     <span class="puzzle-icon">🔐 🛡️</span>
                     <h3 class="puzzle-title">Authentication Methods</h3>
                     <p class="puzzle-description">
